@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img src="assets/icons/app/rigora-light.png" alt="" width="64" height="64">
+  <img src="assets/icons/app/rigora-light.png" alt="" width="64" height="64" align="middle">
   Rigora 2D
 </h1>
 
