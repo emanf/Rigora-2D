@@ -8,13 +8,13 @@ from pathlib import Path
 
 import resvg_py
 from PIL import Image, ImageDraw
+from rigora.infrastructure.character_art.assembly import design, face_parts
 
 from rigora.application_services.asset_pipeline import AssetPipeline
 from rigora.application_services.documents import DocumentService
 from rigora.application_services.output import OutputService, OutputSettings
 from rigora.domain.character_recipe import CHARACTER_PRESETS, MOUTH_POSES, character_preset
 from rigora.domain.project import SceneSettings
-from rigora.infrastructure.character_art.assembly import design, face_parts
 from rigora.infrastructure.media_import import png_bytes
 
 

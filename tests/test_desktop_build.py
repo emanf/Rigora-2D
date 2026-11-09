@@ -103,6 +103,39 @@ def test_build_driver_propagates_failure_and_resolves_native_paths(monkeypatch, 
         builder.native_platform()
 
 
+@pytest.mark.parametrize(
+    ("manager", "pulse_package", "shape_package"),
+    [
+        ("apt-get", "libpulse0", "libxcb-shape0"),
+        ("dnf", "pulseaudio-libs", "libxcb"),
+        ("pacman", "libpulse", "libxcb"),
+    ],
+)
+def test_linux_package_managers_install_qt_audio_and_xcb_libraries(
+    monkeypatch, manager, pulse_package, shape_package
+):
+    """Install the shared libraries required by Qt Multimedia and the xcb platform plugin."""
+    builder = load_tool("build_app")
+    commands = []
+    monkeypatch.setattr(builder.os, "geteuid", lambda: 0, raising=False)
+    monkeypatch.setattr(
+        builder.shutil,
+        "which",
+        lambda name: f"/usr/bin/{manager}" if name == manager else None,
+    )
+
+    def run(command, **kwargs):
+        commands.append(command)
+
+    monkeypatch.setattr(builder.subprocess, "run", run)
+
+    builder.install_linux_packages()
+
+    install = commands[-1]
+    assert pulse_package in install
+    assert shape_package in install
+
+
 def test_batch_reports_combine_only_after_all_tests_pass(tmp_path, monkeypatch):
     """Bounded test processes retain their case results and cannot hide a failed batch."""
     builder = load_tool("build_app")

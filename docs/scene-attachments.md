@@ -136,10 +136,16 @@ and `attachment_point_remove`. Supply `frame` for keys; omit it for setup.
 
 ```python
 # Existing placed Object/bone IDs returned by project inspection:
-api.execute("scene_attach", {
-    "sources": [axe_id], "target": right_hand_id,
-    "point": "@grip", "frame": 40, "snap": False,
-})
+api.execute(
+    "scene_attach",
+    {
+        "sources": [axe_id],
+        "target": right_hand_id,
+        "point": "@grip",
+        "frame": 40,
+        "snap": False,
+    },
+)
 api.execute("scene_detach", {"sources": [axe_id], "frame": 90})
 ```
 
