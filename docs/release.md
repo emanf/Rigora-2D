@@ -1,6 +1,6 @@
 # Development candidate release process
 
-Rigora 0.1.0 is a development candidate. Passing the checks below does not certify
+Rigora 1.0.0 is a development candidate. Passing the checks below does not certify
 the entire Master Brief or remove the open items in [release-audit.md](release-audit.md).
 The local commands below do not publish or upload anything. For the explicitly
 dispatched workflow that builds and attaches native downloads to an existing

@@ -47,7 +47,7 @@ will build that older source, even if the workflow itself is newer.
 
 1. Push the prepared source, including the workflow, to the default branch.
 2. In GitHub, open **Releases → Draft a new release**.
-3. Choose or create a tag for the intended commit, for example `v0.1.0`.
+3. Choose or create a tag for the intended commit, for example `v1.0.0`.
 4. Add release notes describing the candidate and any platform limits.
 5. Publish it as a normal release, with **Set as a pre-release** unchecked.
 

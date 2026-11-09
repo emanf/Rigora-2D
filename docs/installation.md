@@ -41,7 +41,7 @@ Use a separate environment for the built package:
 
 ```powershell
 uv venv .\installed --python 3.12
-uv pip install --python .\installed\Scripts\python.exe "rigora[gui,mcp,render,psd] @ file:///E:/Rigora/dist/rigora-0.1.0-py3-none-any.whl"
+uv pip install --python .\installed\Scripts\python.exe "rigora[gui,mcp,render,psd] @ file:///E:/Rigora/dist/rigora-1.0.0-py3-none-any.whl"
 .\installed\Scripts\rigora.exe
 ```
 

@@ -1,6 +1,6 @@
 # Known limitations
 
-Rigora 0.1.0 is a development candidate. Current production workflows are
+Rigora 1.0.0 is a development candidate. Current production workflows are
 summarized in [production workflows](production-workflows.md); dated validation
 records describe the source at their stated dates, not every later addition.
 

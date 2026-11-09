@@ -1,10 +1,14 @@
+<h1 align="center">
+  <img src="assets/icons/app/rigora-light.png" alt="" width="64" height="64">
+  Rigora 2D
+</h1>
+
+<p align="center">Version <strong>1.0.0</strong> · Development candidate</p>
+
 <p align="center">
-  <img src="docs/images/workspace.png" alt="Rigora 2D character animation workspace" width="1000">
+  <img src="docs/images/workspace.png" alt="Rigora 2D character animation workspace" width="49%">
+  <img src="docs/images/workspace_rig.png" alt="Rigora 2D rigging workspace" width="49%">
 </p>
-
-# Rigora 2D
-
-Version **0.1.0** · Development candidate
 
 Rigora is a desktop rigging and animation editor for 2D games and character animation. Build a character from replaceable vector parts, pose its rig, author reusable motion, and export artwork or an editable game rig.
 
