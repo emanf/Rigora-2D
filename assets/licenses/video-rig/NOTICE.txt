@@ -1,0 +1,24 @@
+Rigora's optional video-rig inference integration uses:
+
+RTMLib 0.0.16 — https://github.com/Tau-J/rtmlib
+Copyright RTMLib contributors. Apache License 2.0.
+
+RTMPose / MMPose human pose and HumanArt detector model sources:
+https://github.com/open-mmlab/mmpose
+Copyright OpenMMLab contributors. Apache License 2.0 repository.
+
+YOLOX multiclass detector:
+https://github.com/Megvii-BaseDetection/YOLOX
+Copyright Megvii and contributors. Apache License 2.0 repository.
+
+ViTPose / ViTPose++ animal pose:
+https://github.com/ViTAE-Transformer/ViTPose
+Copyright OpenMMLab and ViTPose contributors. Apache License 2.0.
+The ONNX conversion publisher https://huggingface.co/JunkyByte/easy_ViTPose
+refers to that upstream model license. The downloaded animal model revision
+is e83805274e89428969355ec4afffcbc413e79188.
+
+See Apache-2.0.txt for the license text. Runtime package distributions also
+retain their dependency licenses and notices. Upstream training images and
+example media are not distributed as Rigora assets. Downloaded model sources
+and SHA-256 hashes are recorded in rigora/infrastructure/video_models.py.

@@ -1,0 +1,13 @@
+{
+  "id": "org.rigora.example.scene_tools",
+  "name": "Scene Tools tutorial",
+  "description": "Move selected Objects through shared commands, menus, toolbars and a dock panel.",
+  "version": "1.0.0",
+  "author": "Rigora SDK examples",
+  "api_version": "2",
+  "entry_point": "rigora_scene_tools:register",
+  "capabilities": ["commands", "panels"],
+  "permissions": ["project.read", "project.write", "ui"],
+  "license": "CC0-1.0",
+  "resources": []
+}

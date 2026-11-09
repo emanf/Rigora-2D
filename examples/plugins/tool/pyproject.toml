@@ -1,0 +1,15 @@
+[build-system]
+requires = ["hatchling==1.32.4"]
+build-backend = "hatchling.build"
+
+[project]
+name = "rigora-org-rigora-example-tool"
+version = "1.0.0"
+requires-python = ">=3.12"
+dependencies = []
+
+[project.entry-points."rigora.plugins"]
+"org.rigora.example.tool" = "rigora_org_rigora_example_tool:register"
+
+[tool.hatch.build.targets.wheel]
+packages = ["rigora_org_rigora_example_tool"]

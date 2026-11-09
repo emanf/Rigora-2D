@@ -1,0 +1,29 @@
+Godot 4 native 2D rig
+
+Extract the complete package and import project.godot, or copy the folder into
+an existing project and instance rig.tscn. No glTF import or third-party addon
+is required for this scene. character.glb is included as an alternative asset.
+
+The scene contains a Skeleton2D, editable Bone2D/Node2D hierarchy and separate
+Polygon2D artwork before scripts run, so its bones are visible in Godot's local
+editor scene tree. The runtime skins vertices against current bones, including sampled
+FFD corrections, source/palette switches, opacity, clothing and layer order.
+Animation is sampled at export FPS. Set playing=false to pose bones manually;
+call refresh_pose() after editing bones to update skinning without resetting them.
+Constraints/springs are sampled poses, not native engine physics solvers.
+
+Use set_clothing(group_id, variant_id), set_part_color(part_name, color), seek(time),
+playing and the event_fired(Dictionary) signal. Seeking never executes events.
+Events retain typed payloads; scripts must decide how to handle them.
+
+Use scene camera is enabled for a complete scene preview. Disable it on the node
+when placing a character under your game's Camera2D. It uses a private CanvasLayer
+for the exported camera transform, background and lens, and does not replace the
+game viewport's canvas transform. With Use scene camera disabled, the armature
+shares the game's canvas and Camera2D. Lens/background textures derive from the same
+original vector renderer as Rigora; particles remain vector polygons. get_regions()
+returns sampled source-pixel polygons/activation for game-specific collision code;
+it does not create colliders or execute payloads automatically.
+
+The source project and original artwork remain included. Keep package files
+together. Test the target engine/project before shipping.

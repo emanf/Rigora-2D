@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rigora:manifest:v2",
+  "title": "Rigora package manifest v2",
+  "type": "object",
+  "required": [
+    "format",
+    "format_version",
+    "project_file",
+    "project_id",
+    "required_features"
+  ],
+  "properties": {
+    "format": {
+      "const": "rigora"
+    },
+    "format_version": {
+      "const": 2
+    },
+    "project_file": {
+      "const": "project.json"
+    },
+    "project_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "created_with": {
+      "type": "string"
+    },
+    "required_features": {
+      "type": "array",
+      "maxItems": 0
+    }
+  },
+  "additionalProperties": true
+}

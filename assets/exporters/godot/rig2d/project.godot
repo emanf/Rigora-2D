@@ -1,0 +1,10 @@
+config_version=5
+[application]
+config/name="Rigora native 2D rig"
+run/main_scene="res://rig.tscn"
+[display]
+window/size/viewport_width=960
+window/size/viewport_height=540
+[rendering]
+renderer/rendering_method="gl_compatibility"
+environment/defaults/default_clear_color=Color(0, 0, 0, 0)

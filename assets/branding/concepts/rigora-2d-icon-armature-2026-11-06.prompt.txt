@@ -1,0 +1,9 @@
+Generated with the built-in image_gen tool, editing rigora-2d-icon-origami-2026-11-06.png.
+
+Use case: precise-object-edit
+Asset type: improved Rigora 2D animation and rigging desktop app icon.
+Edit target: the supplied origami puppet app icon.
+Primary request: redesign the character so it unmistakably looks like a posed 2D animation armature, while retaining the lively asymmetric dancing/running pose and the strong monochrome app-icon presentation. Replace the folded-paper body planes with a coherent visible rig: clean tapered bone silhouettes, wider rounded bases tapering to tips, connected through clear circular joint nodes. Give the figure a small simple circular head, a short neck, a central torso/spine bone, a compact pelvis hub, two articulated arms and two articulated legs. Put each circular node precisely on its connected limb endpoints. One arm bends up, the other extends outward, one knee lifts, the other leg reaches diagonally down. Make the silhouette balanced, intentional, stylish and recognizable at small icon sizes. Rig controls are the visual identity, with a restrained thin circular controller ring around the pelvis only. Clear negative spaces between limbs.
+Preserve: single centered figure, near-black rounded-square tile, monochrome palette of white and light gray, transparent outside the tile, square framing, generous safe margins.
+Style: polished flat graphic, bold visual hierarchy, crisp edges, consistent joint proportions, white bone bodies with subtle flat light-gray secondary bones, dark circular insets where useful to distinguish joints. More refined and cohesive than a stick figure. No origami folds or paper facets remain.
+Avoid: anatomical human bones, skull, medical imagery, text, letters, extra limbs, dangling detached bones, complex wireframe cages, tiny interface widgets, gradients, glow, shadows, 3D mockups, watermark. Deliver the icon itself.

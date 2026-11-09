@@ -1,0 +1,27 @@
+.venv/
+.venv-build/
+.build-tools/
+.uv-cache/
+.npm-cache/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+dist/
+build/
+*.egg-info/
+_project_agent_info/
+tasks/
+.rigora-automation/
+
+# Local credentials, editor state and operating-system metadata.
+.env
+.env.*
+!.env.example
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+Desktop.ini
+

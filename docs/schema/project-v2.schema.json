@@ -1,0 +1,1140 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:rigora:project:v2",
+  "title": "Rigora project data v2",
+  "$comment": "Cross-reference, uniqueness, geometry, and range semantics are enforced by Project.from_dict; see docs/project-format.md.",
+  "$ref": "#/$defs/Project",
+  "$defs": {
+    "Project": {
+      "type": "object",
+      "description": "Canonical immutable authoring document with shared assets and independent scenes.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "pattern": "\\S"
+        },
+        "scenes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Scene"
+          },
+          "maxItems": 100,
+          "minItems": 1
+        },
+        "settings": {
+          "$ref": "#/$defs/ProjectSettings"
+        },
+        "assets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Asset"
+          },
+          "maxItems": 100000
+        },
+        "asset_references": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/AssetReference"
+          },
+          "maxItems": 100000
+        },
+        "extensions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PluginExtension"
+          },
+          "maxItems": 100000
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "scenes"
+      ],
+      "additionalProperties": true
+    },
+    "Scene": {
+      "type": "object",
+      "description": "Immutable scene container owning the complete authoring entity graph.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "pattern": "\\S"
+        },
+        "settings": {
+          "$ref": "#/$defs/SceneSettings"
+        },
+        "layers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Layer"
+          },
+          "maxItems": 100000
+        },
+        "groups": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Group"
+          },
+          "maxItems": 100000
+        },
+        "objects": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SceneObject"
+          },
+          "maxItems": 100000
+        },
+        "characters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Character"
+          },
+          "maxItems": 100000
+        },
+        "skeletons": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Skeleton"
+          },
+          "maxItems": 100000
+        },
+        "meshes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Mesh"
+          },
+          "maxItems": 100000
+        },
+        "slots": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Slot"
+          },
+          "maxItems": 100000
+        },
+        "attachments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Attachment"
+          },
+          "maxItems": 100000
+        },
+        "clips": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/AnimationClip"
+          },
+          "maxItems": 100000
+        },
+        "timelines": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Timeline"
+          },
+          "maxItems": 100000
+        },
+        "deformers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Deformer"
+          },
+          "maxItems": 100000
+        },
+        "constraints": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Constraint"
+          },
+          "maxItems": 100000
+        },
+        "extensions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PluginExtension"
+          },
+          "maxItems": 100000
+        },
+        "draw_order": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 100000
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "settings"
+      ],
+      "additionalProperties": true
+    },
+    "SceneSettings": {
+      "type": "object",
+      "description": "Validated canvas dimensions, integer frame rate, and inclusive frame range.",
+      "properties": {
+        "width": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 16384
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 16384
+        },
+        "fps": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 240
+        },
+        "start_frame": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10000000
+        },
+        "end_frame": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10000000
+        }
+      },
+      "required": [
+        "width",
+        "height",
+        "fps",
+        "start_frame",
+        "end_frame"
+      ],
+      "additionalProperties": true
+    },
+    "Layer": {
+      "type": "object",
+      "description": "Ordered visibility and locking metadata for scene organization.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "pattern": "\\S"
+        },
+        "visible": {
+          "type": "boolean"
+        },
+        "locked": {
+          "type": "boolean"
+        },
+        "order": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "additionalProperties": true
+    },
+    "Group": {
+      "type": "object",
+      "description": "Transform parent that organizes objects and other groups within one scene.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "pattern": "\\S"
+        },
+        "parent_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "layer_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "transform": {
+          "$ref": "#/$defs/Transform"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "additionalProperties": true
+    },
+    "Transform": {
+      "type": "object",
+      "description": "Local affine transform in pixels and degrees around a local pivot.",
+      "properties": {
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        },
+        "rotation": {
+          "type": "number"
+        },
+        "scale_x": {
+          "type": "number"
+        },
+        "scale_y": {
+          "type": "number"
+        },
+        "pivot_x": {
+          "type": "number"
+        },
+        "pivot_y": {
+          "type": "number"
+        }
+      },
+      "required": [],
+      "additionalProperties": true
+    },
+    "SceneObject": {
+      "type": "object",
+      "description": "Renderable-object description referencing an optional source asset and parent.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "pattern": "\\S"
+        },
+        "parent_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "layer_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "asset_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "transform": {
+          "$ref": "#/$defs/Transform"
+        },
+        "visible": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "additionalProperties": true
+    },
+    "Character": {
+      "type": "object",
+      "description": "Instance linking one skeleton to scene objects and deformable meshes.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "pattern": "\\S"
+        },
+        "skeleton_id": {
+          "type": "string"
+        },
+        "object_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 100000
+        },
+        "mesh_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 100000
+        }
+      },
+      "required": [
+        "skeleton_id",
+        "id"
+      ],
+      "additionalProperties": true
+    },
+    "Skeleton": {
+      "type": "object",
+      "description": "Owner of a stable collection of bones with scene-validated parent links.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "pattern": "\\S"
+        },
+        "bones": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Bone"
+          },
+          "maxItems": 100000
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "additionalProperties": true
+    },
+    "Bone": {
+      "type": "object",
+      "description": "Local rest transform and length in an acyclic skeleton hierarchy.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "pattern": "\\S"
+        },
+        "parent_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "length": {
+          "type": "number"
+        },
+        "transform": {
+          "$ref": "#/$defs/Transform"
+        },
+        "visible": {
+          "type": "boolean"
+        },
+        "locked": {
+          "type": "boolean"
+        },
+        "color": {
+          "type": "string"
+        },
+        "group": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "additionalProperties": true
+    },
+    "Mesh": {
+      "type": "object",
+      "description": "Indexed triangle geometry with stable vertices and an optional source asset.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "pattern": "\\S"
+        },
+        "asset_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "object_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "vertices": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Vertex"
+          },
+          "maxItems": 100000
+        },
+        "triangles": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "prefixItems": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "minItems": 3,
+            "maxItems": 3
+          },
+          "maxItems": 100000
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "additionalProperties": true
+    },
+    "Vertex": {
+      "type": "object",
+      "description": "Stable mesh vertex with position, UV coordinates, and normalized bone weights.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "pattern": "\\S"
+        },
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        },
+        "uv": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "number"
+            }
+          ],
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "weights": {
+          "type": "object"
+        },
+        "pinned": {
+          "type": "boolean"
+        },
+        "protected": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "x",
+        "y",
+        "id"
+      ],
+      "additionalProperties": true
+    },
+    "Slot": {
+      "type": "object",
+      "description": "Ordered attachment switch owned by a scene object or skeleton bone.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "pattern": "\\S"
+        },
+        "owner_id": {
+          "type": "string"
+        },
+        "attachment_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 100000
+        },
+        "active_attachment_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "draw_order": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "owner_id",
+        "id"
+      ],
+      "additionalProperties": true
+    },
+    "Attachment": {
+      "type": "object",
+      "description": "Slot content referencing a source asset or mesh with a local transform.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "pattern": "\\S"
+        },
+        "slot_id": {
+          "type": "string"
+        },
+        "asset_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "mesh_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "transform": {
+          "$ref": "#/$defs/Transform"
+        }
+      },
+      "required": [
+        "slot_id",
+        "id"
+      ],
+      "additionalProperties": true
+    },
+    "AnimationClip": {
+      "type": "object",
+      "description": "Inclusive playback range referencing a scene timeline.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "pattern": "\\S"
+        },
+        "timeline_id": {
+          "type": "string"
+        },
+        "in_frame": {
+          "type": "number"
+        },
+        "out_frame": {
+          "type": "number"
+        },
+        "loop": {
+          "type": "boolean"
+        },
+        "annotation": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "timeline_id",
+        "id"
+      ],
+      "additionalProperties": true
+    },
+    "Timeline": {
+      "type": "object",
+      "description": "Named collection of property tracks within a scene.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "pattern": "\\S"
+        },
+        "tracks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Track"
+          },
+          "maxItems": 100000
+        },
+        "markers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Marker"
+          },
+          "maxItems": 100000
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "additionalProperties": true
+    },
+    "Track": {
+      "type": "object",
+      "description": "Ordered property keys with declared blend policy and normalized influence.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "pattern": "\\S"
+        },
+        "owner_id": {
+          "type": "string"
+        },
+        "property_path": {
+          "type": "string"
+        },
+        "keyframes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Keyframe"
+          },
+          "maxItems": 100000
+        },
+        "blend_mode": {
+          "enum": [
+            "override",
+            "additive"
+          ]
+        },
+        "weight": {
+          "type": "number"
+        },
+        "locked": {
+          "type": "boolean"
+        },
+        "visible": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "owner_id",
+        "property_path",
+        "id"
+      ],
+      "additionalProperties": true
+    },
+    "Keyframe": {
+      "type": "object",
+      "description": "Frame-time value and interpolation metadata stored without evaluating animation.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "pattern": "\\S"
+        },
+        "frame": {
+          "type": "number"
+        },
+        "value": {},
+        "interpolation": {
+          "enum": [
+            "step",
+            "linear",
+            "bezier"
+          ]
+        },
+        "tangent_in": {
+          "anyOf": [
+            {
+              "type": "array",
+              "prefixItems": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                }
+              ],
+              "minItems": 2,
+              "maxItems": 2
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "tangent_out": {
+          "anyOf": [
+            {
+              "type": "array",
+              "prefixItems": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                }
+              ],
+              "minItems": 2,
+              "maxItems": 2
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "frame",
+        "value",
+        "id"
+      ],
+      "additionalProperties": true
+    },
+    "Marker": {
+      "type": "object",
+      "description": "Named timeline frame with a persistent animator annotation.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "pattern": "\\S"
+        },
+        "frame": {
+          "type": "number"
+        },
+        "annotation": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "frame",
+        "id"
+      ],
+      "additionalProperties": true
+    },
+    "Deformer": {
+      "type": "object",
+      "description": "Serializable ordered deformation contract targeting a scene object, mesh, or bone.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "pattern": "\\S"
+        },
+        "owner_id": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "parameters": {
+          "type": "object"
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "order": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "owner_id",
+        "kind",
+        "id"
+      ],
+      "additionalProperties": true
+    },
+    "Constraint": {
+      "type": "object",
+      "description": "Deformation-style rule with an optional target in the same scene.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "pattern": "\\S"
+        },
+        "owner_id": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "parameters": {
+          "type": "object"
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "order": {
+          "type": "integer"
+        },
+        "target_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "owner_id",
+        "kind",
+        "id"
+      ],
+      "additionalProperties": true
+    },
+    "PluginExtension": {
+      "type": "object",
+      "description": "Versioned plugin-owned JSON payload that is never imported or executed on load.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "pattern": "\\S"
+        },
+        "plugin_id": {
+          "type": "string"
+        },
+        "version": {
+          "type": "integer"
+        },
+        "payload": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "plugin_id",
+        "id"
+      ],
+      "additionalProperties": true
+    },
+    "ProjectSettings": {
+      "type": "object",
+      "description": "Project-wide coordinate, unit, time, and color conventions.",
+      "properties": {
+        "units": {
+          "enum": [
+            "pixels"
+          ]
+        },
+        "coordinate_system": {
+          "enum": [
+            "top-left-x-right-y-down"
+          ]
+        },
+        "time_unit": {
+          "enum": [
+            "frames"
+          ]
+        },
+        "color_profile": {
+          "enum": [
+            "srgb"
+          ]
+        }
+      },
+      "required": [],
+      "additionalProperties": true
+    },
+    "Asset": {
+      "type": "object",
+      "description": "Opaque source descriptor with a relative location and optional integrity digest.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "pattern": "\\S"
+        },
+        "kind": {
+          "enum": [
+            "raster",
+            "vector",
+            "audio",
+            "sequence"
+          ]
+        },
+        "source": {
+          "type": "string"
+        },
+        "storage": {
+          "enum": [
+            "embedded",
+            "external"
+          ]
+        },
+        "media_type": {
+          "type": "string"
+        },
+        "sha256": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "source",
+        "id"
+      ],
+      "additionalProperties": true
+    },
+    "AssetReference": {
+      "type": "object",
+      "description": "Stable indirection to a project-owned source asset.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "pattern": "\\S"
+        },
+        "asset_id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "asset_id",
+        "id"
+      ],
+      "additionalProperties": true
+    }
+  }
+}

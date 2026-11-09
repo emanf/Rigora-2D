@@ -1,0 +1,19 @@
+{
+  "format": "rigora.motion-pilot",
+  "version": 1,
+  "profile": {
+    "move": true,
+    "move_x": 1,
+    "move_y": 1,
+    "face": "Flip",
+    "lazy_mouse": 0.18,
+    "wave_move": true,
+    "wave_y": 12,
+    "wave_speed": 0.6,
+    "delay_mode": "Uniform",
+    "delay_frames": 3,
+    "blend": true,
+    "optimize": true,
+    "tolerance": 0.35
+  }
+}

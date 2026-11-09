@@ -1,0 +1,9 @@
+Generated with the built-in image_gen tool.
+
+Use case: logo-brand
+Asset type: square desktop app icon for Rigora 2D, a 2D animation and skeletal rigging application.
+Primary request: a completely fresh visual identity: a bold abstract origami puppet caught in a lively running or dancing pose. The character is assembled from a few broad angular folded-paper polygons, with three small circular joint cutouts that subtly communicate skeletal rigging. Its head is a simple tilted quadrilateral, one arm raised, legs striking a dynamic asymmetric pose. The overall silhouette is compact, expressive and immediately memorable.
+Style/medium: sophisticated geometric cut-paper graphic, crisp flat vector-like edges, playful creative-tool identity, strong graphic design.
+Composition: one large centered symbol on a solid near-black rounded-square tile, comfortable safe margins, highly readable at app-icon size. Transparent outside the tile.
+Color palette: only white, light gray, medium gray and near-black. Separate overlapping paper planes with flat contrasting grays.
+Constraints: no letter R, no monogram, no text, no wordmark, no conventional bone-shaped segments, no medical skeleton, no skull, no gradients, no glow, no drop shadows, no 3D render, no mockup, no border ornament, no watermark. Deliver a single finished icon.

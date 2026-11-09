@@ -1,0 +1,23 @@
+{
+  "id": "org.rigora.example.content",
+  "name": "Example content",
+  "description": "Original Rigora API 1 content example.",
+  "version": "1.0.0",
+  "author": "Rigora SDK examples",
+  "api_version": "1",
+  "entry_point": "rigora_org_rigora_example_content:register",
+  "capabilities": [
+    "asset_packs"
+  ],
+  "permissions": [
+    "filesystem"
+  ],
+  "dependencies": [],
+  "resources": [
+    "starter.rigpack"
+  ],
+  "icon": "extension",
+  "license": "CC0-1.0",
+  "documentation_url": "",
+  "license_url": ""
+}

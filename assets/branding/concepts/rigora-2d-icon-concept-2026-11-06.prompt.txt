@@ -1,0 +1,9 @@
+Generated with the built-in image_gen tool.
+
+Use case: logo-brand
+Asset type: polished square desktop application icon for "Rigora 2D", a 2D animation and skeletal rigging application.
+Primary request: create a distinctive, beautifully balanced icon whose bold silhouette combines an abstract capital R with a small articulated animation armature. A few strong tapered bone segments with round joint nodes form one cohesive memorable symbol; an angled lower limb gives a subtle sense of motion and posing.
+Style/medium: precise flat vector-like graphic, professional creative software branding, exceptionally clean edges and intentional negative space.
+Composition: one large centered symbol, strong readability at 32 pixels, generous safe margin, square canvas. Solid near-black rounded-square tile with a white and light-gray mark. Outside the rounded tile is transparent.
+Color palette: neutral black, dark gray, light gray and white only.
+Constraints: no text or wordmark, no gradients, no glow, no shadows, no 3D mockup, no tiny details, no anatomical skull or medical skeleton, no extra decorative objects, no watermark. Deliver the icon itself.

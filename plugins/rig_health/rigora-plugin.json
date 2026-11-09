@@ -1,0 +1,15 @@
+{
+  "id": "org.rigora.rig_health",
+  "name": "Rig Health Check",
+  "description": "Inspect rigging and animation risks with a dockable report and repair guidance.",
+  "version": "2.0.0",
+  "author": "Rigora SDK examples",
+  "api_version": "2",
+  "entry_point": "rig_health:register",
+  "capabilities": ["panels", "validators", "commands"],
+  "permissions": ["project.read", "ui"],
+  "resources": [],
+  "icon": "fact_check",
+  "license": "CC0-1.0",
+  "license_url": "https://creativecommons.org/publicdomain/zero/1.0/"
+}

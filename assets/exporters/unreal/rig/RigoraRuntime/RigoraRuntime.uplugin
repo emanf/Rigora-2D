@@ -1,0 +1,10 @@
+{
+  "FileVersion": 3,
+  "Version": 1,
+  "VersionName": "1.0",
+  "FriendlyName": "Rigora editable rigs",
+  "Description": "Blueprint wardrobe, per-part colors and sampled visibility for imported Rigora glTF skins.",
+  "Category": "Animation",
+  "CanContainContent": false,
+  "Modules": [{"Name": "RigoraRuntime", "Type": "Runtime", "LoadingPhase": "Default"}]
+}

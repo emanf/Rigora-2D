@@ -1,0 +1,14 @@
+Godot 4 editable planar rig
+
+Open project.godot and run to preview with an automatically fitted camera.
+For an existing game, instantiate rig.tscn. Its glTF child contains native
+Skeleton3D bones, skinned MeshInstance3D parts and AnimationPlayer tracks.
+Use an orthographic Camera3D looking toward the XY plane to place it in a game.
+This is a planar 3D rig; the existing sprite export remains the native 2D option.
+
+The wrapper applies visibility/opacity and audio while playing the native clip.
+set_clothing(group_id, variant_id) changes one category; empty variant removes it.
+set_part_color(part_node_name, Color(...)) independently tints a garment or body part.
+Find IDs, names, variants and mesh membership in rig.json. Stop AnimationPlayer
+before manually posing bones. Native bones, weights, meshes and materials remain
+editable in an inherited glTF scene. FFD/constraints were sampled at export FPS.

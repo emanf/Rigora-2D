@@ -1,0 +1,92 @@
+[build-system]
+requires = ["hatchling==1.32.4"]
+build-backend = "hatchling.build"
+
+[project]
+name = "rigora"
+dynamic = ["version"]
+description = "An extensible desktop application for 2D rigging and animation."
+readme = "README.md"
+requires-python = ">=3.12,<3.15"
+authors = [{ name = "Rigora 2D contributors" }]
+dependencies = [
+    "shapely==2.1.2",
+]
+
+[project.optional-dependencies]
+gui = ["PySide6==6.12.0", "pocketsphinx==5.0.4"]
+mcp = [
+    "mcp==2.3.0",
+]
+render = [
+    "pillow==13.0.0",
+    "resvg-py==0.5.0",
+]
+psd = [
+    "psd-tools==1.25.0",
+]
+illustrator = [
+    "pypdfium2==5.14.0",
+    "pillow==13.0.0",
+]
+tracking = [
+    "mediapipe==1.1.1",
+]
+speech = [
+    "pocketsphinx==5.0.4",
+]
+video-rig = [
+    "rtmlib==0.0.16",
+]
+
+[dependency-groups]
+build = ["pyinstaller==6.22.3"]
+dev = [
+  "mypy==1.20.2",
+  "pytest==9.1.1",
+  "pytest-qt==4.5.0",
+  "ruff==0.17.1",
+]
+
+[project.scripts]
+rigora = "rigora.interfaces.cli.main:main"
+rigora-headless = "rigora.interfaces.cli.main:headless_main"
+rigora-automation = "rigora.interfaces.cli.automation:automation_main"
+rigora-mcp = "rigora.interfaces.mcp_server:main"
+
+[tool.hatch.version]
+path = "src/rigora/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/rigora"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"assets" = "rigora/assets"
+
+[tool.hatch.build.targets.sdist]
+include = ["/src", "/tests", "/docs", "/assets", "/plugins", "/examples", "/tools", "/packaging", "/.github", "/README.md", "/AGENTS.md", "/*.bat", "/*.sh", "/*.command", "/pyproject.toml", "/uv.lock", "/.python-version", "/.gitattributes", "/.gitignore"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+cache_dir = "build/pytest-cache"
+addopts = "-ra --strict-markers --strict-config"
+qt_api = "pyside6"
+markers = ["gui: requires the optional PySide6 desktop dependencies"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+extend-exclude = [".uv-cache", ".venv-build", ".build-tools", "build", "dist"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+files = ["src/rigora"]
+
+[[tool.mypy.overrides]]
+module = ["mcp.*", "uvicorn.*", "anyio.*", "pydantic.*", "PIL.*", "resvg_py", "psd_tools.*", "shapely.*", "pypdfium2.*", "mediapipe.*", "numpy.*", "pocketsphinx.*", "rtmlib.*", "onnxruntime.*"]
+ignore_missing_imports = true
+

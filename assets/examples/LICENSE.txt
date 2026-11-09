@@ -1,0 +1,6 @@
+Rigora deformation studies: arm.svg, torso.svg, prop.svg, torso.png.
+torso.png is a raster rendering of the original torso.svg illustration.
+Original geometric illustrations created for Rigora 2D, 2026.
+Dedicated to the public domain under CC0 1.0 Universal:
+https://creativecommons.org/publicdomain/zero/1.0/
+No third-party art or proprietary example assets are included.

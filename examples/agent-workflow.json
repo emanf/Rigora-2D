@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "steps": [
+    {"id": "project", "operation": "project_create", "arguments": {"name": "Offline agent character", "width": 900, "height": 600}},
+    {"id": "actor", "operation": "character_create", "arguments": {"content": "Dash · Runner", "x": 300, "y": 100}},
+    {"id": "rig", "operation": "rig_create", "arguments": {"template": "Human · full body"}},
+    {"id": "motion", "operation": "motion_apply", "arguments": {"content": "Natural · Walk", "target_id": "$actor.rig_ids.0"}},
+    {"id": "clip", "operation": "clip_create", "arguments": {"name": "Agent walk", "duplicate": true}},
+    {"id": "keys", "operation": "keyframe_set", "arguments": {"owner_id": "$actor.object_ids.0", "property_path": "opacity", "frame": 0, "value": 1}},
+    {"id": "preview", "operation": "frame_render", "arguments": {"path": "output/walk.svg", "frames": [0, 6, 12, 18], "width": 900, "height": 600}},
+    {"id": "validation", "operation": "project_validate"},
+    {"id": "saved", "operation": "project_save", "arguments": {"path": "output/agent-character.rigora"}}
+  ]
+}

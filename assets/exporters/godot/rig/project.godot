@@ -1,0 +1,9 @@
+config_version=5
+[application]
+config/name="Rigora editable rig"
+run/main_scene="res://preview.tscn"
+[display]
+window/size/viewport_width=960
+window/size/viewport_height=720
+[rendering]
+renderer/rendering_method="gl_compatibility"

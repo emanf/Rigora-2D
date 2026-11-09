@@ -1,0 +1,54 @@
+name: Source quality
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: quality-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  source:
+    name: Source checks and offscreen tests
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-2025, ubuntu-24.04, macos-15]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 120
+    env:
+      QT_QPA_PLATFORM: offscreen
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@07a047e608db84b3d8c06cd9a7c7dcc9c355c18e # v10.3.2
+        with:
+          python-version: '3.12'
+          enable-cache: true
+      - name: Install locked source dependencies
+        run: uv sync --locked --extra gui --extra render --extra psd --extra illustrator --extra mcp
+      - name: Install headless Linux graphics libraries
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y libegl1 libopengl0 libxkbcommon0
+      - name: Lint
+        run: uv run --no-sync ruff check .
+      - name: Format
+        run: uv run --no-sync ruff format --check .
+      - name: Types
+        run: uv run --no-sync mypy src
+      - name: Tests
+        run: uv run --no-sync pytest -q --junitxml=build/quality-tests.xml
+      - name: Retain verification results
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: source-verification-${{ matrix.os }}
+          path: build/quality-tests.xml
+          if-no-files-found: ignore
+          retention-days: 7

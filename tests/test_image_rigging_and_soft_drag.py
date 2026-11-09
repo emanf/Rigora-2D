@@ -1,0 +1,139 @@
+"""Single-image skinning, independent placement roots and smooth area influence contracts."""
+
+import math
+from dataclasses import replace
+from io import BytesIO
+
+import pytest
+from PIL import Image
+
+from rigora.application_services.documents import DocumentService
+from rigora.application_services.image_rigging import ImageRigService
+from rigora.application_services.rigging import RigService
+from rigora.domain.project import ProjectError
+from rigora.engine.ffd_controls import soft_drag_weights
+
+
+def image_bytes(kind="svg"):
+    """Provide a small, original opaque source in either supported image pipeline."""
+    if kind == "svg":
+        return (
+            b'<svg xmlns="http://www.w3.org/2000/svg" width="320" height="480">'
+            b'<rect width="320" height="480" fill="#777"/></svg>'
+        )
+    output = BytesIO()
+    Image.new("RGBA", (320, 480), (120, 120, 120, 255)).save(output, format="PNG")
+    return output.getvalue()
+
+
+@pytest.mark.parametrize("kind", ("svg", "png"))
+def test_single_image_draw_refines_binds_deforms_and_undoes(kind, tmp_path):
+    """Drawing two bones makes real nonlinear skinning; each draw is one reversible edit."""
+    document = DocumentService()
+    document.new()
+    service = ImageRigService(document)
+    mesh_id = service.import_image_bytes(f"Character.{kind}", image_bytes(kind), 4, 4)
+    original = document.project
+    original_count = len(service.mesh(mesh_id).vertices)
+    undo_count = len(document.history.undo_stack)
+    first = service.draw_bone(mesh_id, (850, 400), (950, 400))
+    second = service.draw_bone(mesh_id, (950, 400), (1050, 400), first)
+    mesh = service.mesh(mesh_id)
+    assert len(mesh.vertices) > original_count
+    stage = next(d for d in service.scene.deformers if d.kind == "skinning")
+    assert set(stage.parameters["bind_matrices"]) == {first, second}
+    assert all(sum(v.weights.values()) == pytest.approx(1) for v in mesh.vertices)
+    assert len(document.history.undo_stack) == undo_count + 2
+    before = document.animation.pose.meshes[mesh_id].positions
+    rig = RigService(document)
+    bone = rig.bone(second)
+    rig.update(second, transform=replace(bone.transform, rotation=60))
+    after = document.animation.pose.meshes[mesh_id].positions
+    distances = [math.dist(a, b) for a, b in zip(before, after, strict=True)]
+    assert max(distances) > 20 and max(distances) - min(distances) > 10
+    document.save(tmp_path / "image-rig.rigora")
+    reopened = DocumentService()
+    reopened.open(tmp_path / "image-rig.rigora")
+    assert reopened.animation.pose.meshes[mesh_id].positions == after
+    document.undo()
+    document.undo()
+    document.undo()
+    assert document.project == original
+
+
+def test_image_rigs_are_separate_and_root_positions_are_independent(tmp_path):
+    """Two images own separate skeletons; root placement never changes their actual geometry."""
+    document = DocumentService()
+    document.new()
+    service, rig = ImageRigService(document), RigService(document)
+    first = service.import_image_bytes("A.svg", image_bytes())
+    second = service.import_image_bytes("B.svg", image_bytes())
+    a = service.draw_bone(first, (200, 200), (250, 200))
+    b = service.draw_bone(second, (700, 200), (750, 200))
+    assert (
+        service.mesh(first).extra["rig_skeleton_id"]
+        != service.mesh(second).extra["rig_skeleton_id"]
+    )
+    assert len(service.scene.characters) == 2
+    character, other = service.scene.characters
+    pose = document.animation.pose
+    original = document.project
+    other_origin = rig.origin(other.id)
+    rig.move_origin(400, 500, character.id, free=True)
+    assert rig.origin(character.id) == (400, 500)
+    assert rig.origin(other.id) == other_origin
+    assert document.animation.pose.nodes == pose.nodes
+    assert document.animation.pose.meshes == pose.meshes
+    document.undo()
+    assert document.project == original
+    rig.move_origin(400, 500, character.id, free=True)
+    document.save(tmp_path / "roots.rigora")
+    reopened = DocumentService()
+    reopened.open(tmp_path / "roots.rigora")
+    assert RigService(reopened).origin(character.id) == (400, 500)
+    with pytest.raises(ProjectError, match="another image rig"):
+        service.draw_bone(first, (750, 200), (800, 200), b)
+    assert rig.bone(a)
+
+
+def test_soft_influence_is_smooth_compact_and_scaled_once():
+    """Influence is strongest under the cursor, zero outside, smooth at both endpoints."""
+    weights = soft_drag_weights({0: (0, 0), 1: (25, 0), 2: (50, 0), 3: (100, 0)}, (0, 0), 100, 0.8)
+    assert weights[0] == 0.8 and weights[2] == pytest.approx(0.4)
+    assert 0.8 > weights[1] > weights[2] > 0 and 3 not in weights
+    for radius, strength in ((0, 1), (math.inf, 1), (100, 2)):
+        with pytest.raises(ProjectError):
+            soft_drag_weights({0: (0, 0)}, (0, 0), radius, strength)
+
+
+def test_auto_refinement_preserves_edited_meshes():
+    """A manually adjusted point or topology is never regenerated by automatic image rigging."""
+    document = DocumentService()
+    document.new()
+    service = ImageRigService(document)
+    mesh_id = service.import_image_bytes("Character.svg", image_bytes())
+    mesh = service.mesh(mesh_id)
+    vertex = mesh.vertices[0]
+    service.move(mesh_id, {vertex.id: (vertex.x + 8, vertex.y + 4)})
+    edited = service.mesh(mesh_id)
+    service.draw_bone(mesh_id, (100, 100), (200, 100))
+    assert [(v.id, v.x, v.y) for v in service.mesh(mesh_id).vertices] == [
+        (v.id, v.x, v.y) for v in edited.vertices
+    ]
+
+
+def test_character_root_survives_deleting_every_bone_and_accepts_new_chain():
+    """A character's last ordinary bone can be deleted without losing its placement root."""
+    document = DocumentService()
+    document.new()
+    service, rig = ImageRigService(document), RigService(document)
+    mesh_id = service.import_image_bytes("Character.svg", image_bytes())
+    bone = service.draw_bone(mesh_id, (200, 200), (300, 200))
+    character = service.scene.characters[0]
+    rig.move_origin(180, 300, character.id, free=True)
+    rig.delete_many((bone,))
+    assert rig.origin(character.id) == (180, 300)
+    assert all(b.extra.get("rig_root") for b in service.scene.skeletons[0].bones)
+    service.draw_bone(mesh_id, (180, 300), (240, 300))
+    assert len(service.scene.skeletons) == len(service.scene.characters) == 1
+    assert len([b for b in service.scene.skeletons[0].bones if not b.extra.get("rig_root")]) == 1

@@ -1,0 +1,23 @@
+{
+  "id": "org.rigora.example.tool",
+  "name": "Example tool",
+  "description": "Original Rigora API 1 tool example.",
+  "version": "1.0.0",
+  "author": "Rigora SDK examples",
+  "api_version": "1",
+  "entry_point": "rigora_org_rigora_example_tool:register",
+  "capabilities": [
+    "tools"
+  ],
+  "permissions": [
+    "project.read",
+    "project.write",
+    "ui"
+  ],
+  "dependencies": [],
+  "resources": [],
+  "icon": "extension",
+  "license": "CC0-1.0",
+  "documentation_url": "",
+  "license_url": ""
+}

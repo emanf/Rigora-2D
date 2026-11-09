@@ -1,0 +1,149 @@
+name: Build and upload to latest release
+
+on:
+  workflow_dispatch:
+    inputs:
+      verify:
+        description: Also run source checks and offscreen application verification
+        type: boolean
+        default: false
+      replace_existing:
+        description: Replace matching Rigora packages already attached to the release
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: latest-release-${{ github.repository }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Select release and source commit
+    if: github.actor == github.repository_owner && github.triggering_actor == github.repository_owner
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      id: ${{ steps.release.outputs.id }}
+      tag: ${{ steps.release.outputs.tag }}
+      sha: ${{ steps.release.outputs.sha }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Check release API guards without publishing
+        run: node --test tests/release_workflow.test.cjs
+      - name: Select latest published release
+        id: release
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const {selectRelease} = require('./tools/release_workflow.cjs');
+            await selectRelease({github, context, core});
+
+  package:
+    name: Build ${{ matrix.platform }} ${{ matrix.arch }}
+    needs: release
+    if: github.actor == github.repository_owner && github.triggering_actor == github.repository_owner
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: windows
+            arch: x64
+            runner: windows-2025
+          - platform: linux
+            arch: x64
+            runner: ubuntu-24.04
+          - platform: macos
+            arch: arm64
+            runner: macos-15
+    env:
+      RELEASE_TAG: ${{ needs.release.outputs.tag }}
+      SOURCE_SHA: ${{ needs.release.outputs.sha }}
+      VERIFY_BUILD: ${{ inputs.verify }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.release.outputs.sha }}
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@07a047e608db84b3d8c06cd9a7c7dcc9c355c18e # v10.3.2
+        with:
+          python-version: '3.12'
+          enable-cache: false
+      - name: Compile native application
+        shell: bash
+        run: |
+          options=()
+          if [[ "$VERIFY_BUILD" == "true" ]]; then options+=(--verify); fi
+          uv run --no-project --python 3.12 tools/build_app.py --uv uv "${options[@]}"
+      - name: Create release ZIP and provenance manifest
+        shell: bash
+        env:
+          BUILD_ARCH: ${{ matrix.arch }}
+        run: |
+          uv run --no-project --python 3.12 tools/release_assets.py package \
+            --source dist --output build/release-assets \
+            --tag "$RELEASE_TAG" --commit "$SOURCE_SHA" --arch "$BUILD_ARCH"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: Rigora-package-${{ matrix.platform }}-${{ matrix.arch }}
+          path: build/release-assets/*
+          if-no-files-found: error
+          retention-days: 7
+          compression-level: 0
+      - name: Keep build diagnostics
+        uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: Rigora-build-log-${{ matrix.platform }}-${{ matrix.arch }}
+          path: |
+            dist/*/build.log
+            dist/*/build-report.json
+            dist/*/bundle-check.json
+            dist/*/tests*.xml
+          if-no-files-found: warn
+          retention-days: 7
+
+  publish:
+    name: Attach packages to selected release
+    needs: [release, package]
+    if: github.actor == github.repository_owner && github.triggering_actor == github.repository_owner
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: Rigora-package-*
+          path: build/downloaded-artifacts
+      - name: Verify all archives and source revisions
+        env:
+          RELEASE_TAG: ${{ needs.release.outputs.tag }}
+          SOURCE_SHA: ${{ needs.release.outputs.sha }}
+        run: |
+          python3 tools/release_assets.py collect \
+            --source build/downloaded-artifacts --output build/release-assets \
+            --tag "$RELEASE_TAG" --commit "$SOURCE_SHA"
+      - name: Upload downloads
+        uses: actions/github-script@v9
+        env:
+          RELEASE_ID: ${{ needs.release.outputs.id }}
+          RELEASE_TAG: ${{ needs.release.outputs.tag }}
+          SOURCE_SHA: ${{ needs.release.outputs.sha }}
+          REPLACE_EXISTING: ${{ inputs.replace_existing }}
+        with:
+          script: |
+            const {publishAssets} = require('./tools/release_workflow.cjs');
+            await publishAssets({github, context, core,
+              releaseId: Number(process.env.RELEASE_ID), tag: process.env.RELEASE_TAG,
+              sha: process.env.SOURCE_SHA, replace: process.env.REPLACE_EXISTING === 'true',
+              directory: 'build/release-assets'});

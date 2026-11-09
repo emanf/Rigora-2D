@@ -1,0 +1,29 @@
+Unreal editable planar glTF rig
+
+Enable Interchange glTF import and Python Editor Script Plugin. Run
+import_editable_rig.py through Execute Python Script, or import character.glb.
+Use the native Interchange options to import skeletal meshes, skin weights,
+animations and morph targets. Retain separate meshes for replaceable clothing.
+Use unlit, translucent, two-sided materials and an orthographic camera.
+
+rig.json records every part's name, wardrobe variants, covered body parts,
+visibility/opacity samples and audio timing. Set component visibility to its
+first exported state before rendering; hidden clothing variants are retained.
+Clothing switches can use SetVisibility on skeletal mesh components sharing the
+imported skeleton. Re-enable each variant's covered body parts when removing it.
+The imported native skeleton and mesh weights remain editable.
+
+For Blueprint wardrobe controls, copy RigoraRuntime into your C++ project's Plugins
+folder and build the plugin with your Unreal toolchain. Restart the editor before
+running the import script; it creates a RigDefinition data asset when the plugin
+is enabled. Add RigoraWardrobeComponent to the character Blueprint and assign
+that definition. Parts bind by component/mesh name, or explicitly via BindPart.
+SetClothing(groupId, variantId), SetPartColor(partName, color), Playing and Seek
+are Blueprint-callable. Empty variant removes a category and restores covered
+body parts. Set ColorParameter to your material's RGBA color factor parameter.
+Assign native imported AnimSequences in single-node mode to synchronize them
+with the component's clock; disable DriveSingleNodeAnimations for an AnimBlueprint.
+
+The plugin source and importer require compilation/native validation on your
+Unreal version. No Unreal SDK is installed in the current validation environment;
+this package does not claim verified Unreal runtime behavior.

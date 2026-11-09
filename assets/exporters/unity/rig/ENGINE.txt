@@ -1,0 +1,26 @@
+Unity editable planar rig
+
+Extract under Assets and let scripts compile. Tools > Rigora > Import editable rig
+creates native Transform bones, Mesh assets with bone weights, SkinnedMeshRenderer
+parts, editable AnimationClip curves/morph targets and a Character prefab.
+No third-party Unity package is required. A separate glTF version is also included.
+
+The prefab includes a sampled orthographic scene camera, background/lens overlays
+and pooled, per-emitter particle meshes. Camera cuts, rotation, scale and affine
+parent transforms retain the source framing. Particles use source layer order.
+Disable RigoraScenePlayback.useSceneCamera when placing a character under your
+game's own camera. This hides only the exported camera and its overlays; it never
+disables another camera. Particles continue rendering. Object Editor exports
+disable scene-camera driving by default. Main-scene exports enable it.
+
+Use unlit alpha-capable materials for this planar rig.
+100 pixels = 1 unit. The included built-in unlit material can be replaced for URP/HDRP.
+RigoraRig.SetClothing(groupId, variantId) changes one category; empty removes it.
+RigoraRig.SetPartColor(partNodeName, color) tints parts independently.
+RigoraRig.Seek(seconds) silently samples bones, textures, wardrobe and scene data.
+EventFired carries typed marker data and JSON payloads without executing them.
+For a caller-owned forward clock, stop Animation and call Advance(deltaSeconds).
+Each Advance supports at most 4096 loop crossings; invalid deltas are rejected.
+Normal Animation playback delivers callbacks, including initial/final events.
+Stop the Animation component before manually posing bones. Mesh geometry, weights,
+materials and clothing stay independently editable. IDs and labels are in rig.json.

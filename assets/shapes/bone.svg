@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1536" viewBox="0 0 1024 1536">
+  <title>Gray 2D rig bone</title>
+  <desc>Transparent background. A gray circular joint at each end, dark gray outlines, long tapered shaft, and a wider diamond section near the lower joint.</desc>
+  <g fill="#a8a9ad" stroke="#414246" stroke-width="11" stroke-linejoin="round">
+    <path d="M512 204
+             L393 1112
+             L512 1358
+             L631 1112
+             Z"/>
+    <circle cx="512" cy="170" r="54"/>
+    <circle cx="512" cy="1402" r="54"/>
+  </g>
+</svg>

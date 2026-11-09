@@ -1,0 +1,21 @@
+{
+  "id": "org.rigora.example.deformer",
+  "name": "Example deformer",
+  "description": "Original Rigora API 1 deformer example.",
+  "version": "1.0.0",
+  "author": "Rigora SDK examples",
+  "api_version": "1",
+  "entry_point": "rigora_org_rigora_example_deformer:register",
+  "capabilities": [
+    "deformers"
+  ],
+  "permissions": [
+    "project.read"
+  ],
+  "dependencies": [],
+  "resources": [],
+  "icon": "extension",
+  "license": "CC0-1.0",
+  "documentation_url": "",
+  "license_url": ""
+}

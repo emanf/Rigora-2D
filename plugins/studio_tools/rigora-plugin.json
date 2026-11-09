@@ -1,0 +1,15 @@
+{
+  "id": "org.rigora.studio_tools",
+  "name": "Studio Tools",
+  "description": "Integrated rig tools, editor controls, live selection, character presets and templates.",
+  "version": "2.0.0",
+  "author": "Rigora SDK examples",
+  "api_version": "2",
+  "entry_point": "studio_tools:register",
+  "capabilities": ["commands", "tools", "widgets", "hooks", "templates", "asset_packs"],
+  "permissions": ["project.read", "project.write", "ui"],
+  "resources": ["studio.rigpack"],
+  "icon": "construction",
+  "license": "CC0-1.0",
+  "license_url": "https://creativecommons.org/publicdomain/zero/1.0/"
+}
